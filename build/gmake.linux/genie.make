@@ -47,7 +47,7 @@ ifeq ($(config),release)
   TARGETDIR           = ../../bin/linux
   override TARGET              = $(TARGETDIR)/genie
   DEFINES            += -DNDEBUG -DLUA_COMPAT_MODULE -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-  INCLUDES           += -I../../src/host/lua-5.3.0/src
+  INCLUDES           += -I../../src/host/luajit-2.0.4/src
   INCLUDES           +=
   ALL_CPPFLAGS       += $(CPPFLAGS) -MMD -MP -MP $(DEFINES) $(INCLUDES)
   ALL_ASMFLAGS       += $(ASMFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os
@@ -62,39 +62,8 @@ ifeq ($(config),release)
   EXTERNAL_LIBS      +=
   LINKCMD             = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   OBJECTS := \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lapi.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lauxlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lbaselib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lbitlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lcode.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lcorolib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lctype.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldblib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldebug.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldo.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldump.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lfunc.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lgc.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/linit.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/liolib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/llex.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lmathlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lmem.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/loadlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lobject.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lopcodes.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/loslib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lparser.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lstate.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lstring.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lstrlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ltable.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ltablib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ltm.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lundump.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lutf8lib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lvm.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lzio.o \
+	$(OBJDIR)/src/host/luajit-2.0.4/src/lj_vm.o \
+	$(OBJDIR)/src/host/luajit-2.0.4/src/ljamalg.o \
 	$(OBJDIR)/src/host/os_chdir.o \
 	$(OBJDIR)/src/host/os_copyfile.o \
 	$(OBJDIR)/src/host/os_getcwd.o \
@@ -116,6 +85,8 @@ ifeq ($(config),release)
 	$(OBJDIR)/src/host/string_hash.o \
 
   define PREBUILDCMDS
+	@echo Running pre-build commands
+	$(MAKE) -C ../../src/host/luajit-2.0.4/src lj_vm.s lj_bcdef.h lj_ffdef.h lj_libdef.h lj_recdef.h lj_folddef.h host/buildvm_arch.h
   endef
   define PRELINKCMDS
   endef
@@ -128,7 +99,7 @@ ifeq ($(config),debug)
   TARGETDIR           = ../../bin/linux
   override TARGET              = $(TARGETDIR)/genie
   DEFINES            += -D_DEBUG -DLUA_COMPAT_MODULE -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-  INCLUDES           += -I../../src/host/lua-5.3.0/src
+  INCLUDES           += -I../../src/host/luajit-2.0.4/src
   INCLUDES           +=
   ALL_CPPFLAGS       += $(CPPFLAGS) -MMD -MP -MP $(DEFINES) $(INCLUDES)
   ALL_ASMFLAGS       += $(ASMFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g
@@ -143,39 +114,8 @@ ifeq ($(config),debug)
   EXTERNAL_LIBS      +=
   LINKCMD             = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   OBJECTS := \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lapi.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lauxlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lbaselib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lbitlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lcode.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lcorolib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lctype.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldblib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldebug.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldo.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ldump.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lfunc.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lgc.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/linit.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/liolib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/llex.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lmathlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lmem.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/loadlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lobject.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lopcodes.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/loslib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lparser.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lstate.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lstring.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lstrlib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ltable.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ltablib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/ltm.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lundump.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lutf8lib.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lvm.o \
-	$(OBJDIR)/src/host/lua-5.3.0/src/lzio.o \
+	$(OBJDIR)/src/host/luajit-2.0.4/src/lj_vm.o \
+	$(OBJDIR)/src/host/luajit-2.0.4/src/ljamalg.o \
 	$(OBJDIR)/src/host/os_chdir.o \
 	$(OBJDIR)/src/host/os_copyfile.o \
 	$(OBJDIR)/src/host/os_getcwd.o \
@@ -197,6 +137,8 @@ ifeq ($(config),debug)
 	$(OBJDIR)/src/host/string_hash.o \
 
   define PREBUILDCMDS
+	@echo Running pre-build commands
+	$(MAKE) -C ../../src/host/luajit-2.0.4/src lj_vm.s lj_bcdef.h lj_ffdef.h lj_libdef.h lj_recdef.h lj_folddef.h host/buildvm_arch.h
   endef
   define PRELINKCMDS
   endef
@@ -207,7 +149,7 @@ endif
 OBJDIRS := \
 	$(OBJDIR) \
 	$(OBJDIR)/src/host \
-	$(OBJDIR)/src/host/lua-5.3.0/src \
+	$(OBJDIR)/src/host/luajit-2.0.4/src \
 
 RESOURCES := \
 
@@ -255,135 +197,11 @@ $(GCH_OBJC): $(PCH) $(MAKEFILE) | $(OBJDIR)
 	$(SILENT) $(CC) $(ALL_OBJCFLAGS) -x objective-c-header $(DEFINES) $(INCLUDES) -o "$@" -c "$<"
 endif
 
-$(OBJDIR)/src/host/lua-5.3.0/src/lapi.o: ../../src/host/lua-5.3.0/src/lapi.c $(GCH) $(MAKEFILE)
+$(OBJDIR)/src/host/luajit-2.0.4/src/lj_vm.o: ../../src/host/luajit-2.0.4/src/lj_vm.s $(GCH) $(MAKEFILE)
 	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
+	$(SILENT) $(CC) $(ALL_ASMFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/src/host/lua-5.3.0/src/lauxlib.o: ../../src/host/lua-5.3.0/src/lauxlib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lbaselib.o: ../../src/host/lua-5.3.0/src/lbaselib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lbitlib.o: ../../src/host/lua-5.3.0/src/lbitlib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lcode.o: ../../src/host/lua-5.3.0/src/lcode.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lcorolib.o: ../../src/host/lua-5.3.0/src/lcorolib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lctype.o: ../../src/host/lua-5.3.0/src/lctype.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/ldblib.o: ../../src/host/lua-5.3.0/src/ldblib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/ldebug.o: ../../src/host/lua-5.3.0/src/ldebug.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/ldo.o: ../../src/host/lua-5.3.0/src/ldo.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/ldump.o: ../../src/host/lua-5.3.0/src/ldump.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lfunc.o: ../../src/host/lua-5.3.0/src/lfunc.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lgc.o: ../../src/host/lua-5.3.0/src/lgc.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/linit.o: ../../src/host/lua-5.3.0/src/linit.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/liolib.o: ../../src/host/lua-5.3.0/src/liolib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/llex.o: ../../src/host/lua-5.3.0/src/llex.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lmathlib.o: ../../src/host/lua-5.3.0/src/lmathlib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lmem.o: ../../src/host/lua-5.3.0/src/lmem.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/loadlib.o: ../../src/host/lua-5.3.0/src/loadlib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lobject.o: ../../src/host/lua-5.3.0/src/lobject.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lopcodes.o: ../../src/host/lua-5.3.0/src/lopcodes.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/loslib.o: ../../src/host/lua-5.3.0/src/loslib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lparser.o: ../../src/host/lua-5.3.0/src/lparser.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lstate.o: ../../src/host/lua-5.3.0/src/lstate.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lstring.o: ../../src/host/lua-5.3.0/src/lstring.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lstrlib.o: ../../src/host/lua-5.3.0/src/lstrlib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/ltable.o: ../../src/host/lua-5.3.0/src/ltable.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/ltablib.o: ../../src/host/lua-5.3.0/src/ltablib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/ltm.o: ../../src/host/lua-5.3.0/src/ltm.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lundump.o: ../../src/host/lua-5.3.0/src/lundump.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lutf8lib.o: ../../src/host/lua-5.3.0/src/lutf8lib.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lvm.o: ../../src/host/lua-5.3.0/src/lvm.c $(GCH) $(MAKEFILE)
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
-
-$(OBJDIR)/src/host/lua-5.3.0/src/lzio.o: ../../src/host/lua-5.3.0/src/lzio.c $(GCH) $(MAKEFILE)
+$(OBJDIR)/src/host/luajit-2.0.4/src/ljamalg.o: ../../src/host/luajit-2.0.4/src/ljamalg.c $(GCH) $(MAKEFILE)
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -c "$<"
 

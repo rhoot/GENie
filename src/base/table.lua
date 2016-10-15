@@ -5,6 +5,16 @@
 --
 
 
+
+--
+-- Forward compatibility with lua 5.2
+--
+
+	function table.unpack(t)
+		return unpack(t)
+	end
+
+
 --
 -- Returns true if the table contains the specified value.
 --
@@ -212,12 +222,12 @@
 		end
 		return result
 	end
-	
-	
+
+
 	--
 	-- reverse table order
 	--
-	
+
 	function table.reverse(arr)
 		for i=1, math.floor(#arr / 2) do
 			arr[i], arr[#arr - i + 1] = arr[#arr - i + 1], arr[i]

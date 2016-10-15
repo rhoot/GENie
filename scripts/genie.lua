@@ -26,23 +26,24 @@
 			"StaticRuntime"
 		}
 		includedirs {
-			"../src/host/lua-5.3.0/src"
+			"../src/host/luajit-2.0.4/src"
 		}
 
 		files {
 			"../**.lua",
-			"../src/**.h",
-			"../src/**.c",
+			"../src/host/*.h",
+			"../src/host/*.c",
 			"../src/host/scripts.c",
+			"../src/host/luajit-2.0.4/src/ljamalg.c",
+			"../src/host/luajit-2.0.4/src/lj_vm.s",
 		}
 
 		excludes {
 			"../src/premake.lua",
-			"../src/host/lua-5.3.0/src/lua.c",
-			"../src/host/lua-5.3.0/src/luac.c",
-			"../src/host/lua-5.3.0/**.lua",
-			"../src/host/lua-5.3.0/etc/*.c",
+			"../src/host/luajit-2.0.4/**.lua",
 		}
+
+		prebuildcommands { "$(MAKE) -C ../../src/host/luajit-2.0.4/src lj_vm.s lj_bcdef.h lj_ffdef.h lj_libdef.h lj_recdef.h lj_folddef.h host/buildvm_arch.h" }
 
 		configuration "Debug"
 			defines     { "_DEBUG", "LUA_COMPAT_MODULE" }
