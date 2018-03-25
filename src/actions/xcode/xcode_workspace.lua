@@ -40,7 +40,7 @@ end
 function xcode.workspace_generate(sln)
 	xcode.preparesolution(sln)
 	xcode.workspace_head()
-	xcode.reorderProjects(sln)
+	xcode.sortSolution(sln)
 
 	for grp in premake.solution.eachgroup(sln) do
 		if grp.parent == nil then
@@ -58,38 +58,23 @@ function xcode.workspace_generate(sln)
 end
 
 --
--- If a startup project is specified, move it to the front of the project list.
--- This will make Visual Studio treat it like a startup project.
+-- Sort the solution's groups and projects to be listed in alphabetical order.
 --
 
-function xcode.reorderProjects(sln)
-	if sln.startproject then
-			for i, prj in ipairs(sln.projects) do
-				if sln.startproject == prj.name then
-					-- Move group tree containing the project to start of group list
-					local cur = prj.group
-					while cur ~= nil do
-						-- Remove group from array
-						for j, group in ipairs(sln.groups) do
-							if group == cur then
-								table.remove(sln.groups, j)
-								break
-							end
-						end
-
-						-- Add back at start
-						table.insert(sln.groups, 1, cur)
-						cur = cur.parent
-					end
-						-- Move the project itself to start
-					table.remove(sln.projects, i)
-					table.insert(sln.projects, 1, prj)
-					break
-				end
-			end
+function xcode.sortSolution(sln)
+	local function nameCompare(a, b)
+		return a.name < b.name
 	end
+
+	local function sortChildren(grp)
+		table.sort(grp.groups, nameCompare)
+		table.sort(grp.projects, nameCompare)
+
+		for _, child in ipairs(grp.groups) do
+			sortChildren(child)
+		end
+	end
+
+	sortChildren(sln)
 end
-
-
-
 
